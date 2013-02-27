@@ -4,7 +4,7 @@ class ParameterView extends Backbone.View
   render: ->
     @model.isBody = true if @model.paramType == 'body'
     @model.isFile = true if @model.dataType == 'file'
-
+    
     template = @template()
     $(@el).html(template(@model))
 
@@ -32,8 +32,36 @@ class ParameterView extends Backbone.View
     contentTypeView = new ContentTypeView({model: contentTypeModel})
     $('.content-type', $(@el)).append contentTypeView.render().el
 
+    self = @
+    
+    onPlus = (row) ->
+      clone = row.clone()
+      $('.multiple-plus-button', $(clone)).click ->
+          onPlus($(@).parent().parent())
+      $('.multiple-minus-button', $(clone)).click ->
+          onMinus($(@).parent().parent())
+      row.removeClass('last-param')
+      clone.removeClass('first-param')
+      clone.addClass('last-param')
+      row.after(clone)
+    
+    onMinus = (row) ->
+       if row.hasClass('last-param')
+         row.prev().addClass('last-param')
+       row.remove()
+    
+    $('.multiple-plus-button', $(@el)).click ->
+        onPlus($(@).parent().parent())
+      
+    $('.multiple-minus-button', $(@el)).click ->
+        onMinus($(@).parent().parent())  
+        
+    $(@el).addClass('first-param')      
+    $(@el).addClass('last-param')      
     @
 
+ 
+  
   # Return an appropriate template based on if the parameter is a list, readonly, required
   template: ->
     if @model.isList

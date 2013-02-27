@@ -1588,3 +1588,40 @@ pre code {
   margin: 0;
   padding: 15px 0 5px 0px;
 }
+
+.operation-params tr td select {
+    float: left;
+}
+
+.operation-params tr td input {
+    float: left;
+}
+
+.multiple-plus-button {
+	visibility: hidden;
+    background: transparent url(../images/plus.png) no-repeat left center;
+    float: left;
+    width: 25px;
+    height: 25px;
+    margin-left: 25px;
+}
+
+.last-param .multiple-plus-button {
+    visibility: visible;    
+}
+
+.multiple-minus-button {
+    visibility: hidden;
+	background: transparent url(../images/minus.png) no-repeat left center;
+    float: left;
+    width: 25px;
+    height: 25px;
+}
+
+.last-param .multiple-minus-button {
+    visibility: visible;    
+}
+
+.first-param .multiple-minus-button {
+    visibility: hidden;    
+}

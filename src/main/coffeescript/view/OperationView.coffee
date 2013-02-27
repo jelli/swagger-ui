@@ -74,7 +74,10 @@ class OperationView extends Backbone.View
       map = {}
       for o in form.serializeArray()
         if(o.value? && jQuery.trim(o.value).length > 0)
-          map[o.name] = o.value
+          if(map[o.name])
+            map[o.name] = [].concat(map[o.name]).concat(o.value)
+          else     
+            map[o.name] = o.value
 
       isFileUpload = form.children().find('input[type~="file"]').size() != 0
 
@@ -114,6 +117,7 @@ class OperationView extends Backbone.View
           bodyParam.append(param.name, map[param.name])
       else
         bodyParam = null
+        
         for param in @model.parameters
           if param.paramType is 'body'
             bodyParam = map[param.name]

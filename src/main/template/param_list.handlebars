@@ -16,6 +16,10 @@
             {{/if}}
         {{/each}}
     </select>
+    {{#if allowMultiple}}
+        <div class="multiple-plus-button"></div>
+        <div class="multiple-minus-button"></div>
+    {{/if}}
 </td>
 <td>{{{description}}}</td>
 <td><span class="model-signature"></span></td>
