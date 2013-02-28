@@ -39,6 +39,7 @@ class SwaggerUi extends Backbone.Router
     @options.apiKey = data.apiKey
     @options.apiLogin = data.apiLogin
     @options.apiPassword = data.apiPassword
+    @options.apiToken = data.apiToken
     
     self = @
     
@@ -50,7 +51,6 @@ class SwaggerUi extends Backbone.Router
         dataType: "json"
         data: JSON.stringify({email:data.apiLogin, password:data.apiPassword})
         success : (data) ->
-          self.options.status("authenticated "+self.options.apiLogin+" ("+data.accessToken+")")
           self.options.accessToken = data.accessToken
           self.load() 
         error : (jqXHR, textStatus, errorThrown) ->
@@ -66,6 +66,7 @@ class SwaggerUi extends Backbone.Router
     @options.headers = {}
     @options.supportHeaderParams = true
     if @options.accessToken
+      @options.status("authenticated "+@options.apiLogin+" ("+@options.accessToken+")")
       @options.headers['X-Jelli-Authentication'] = 'accessToken='+ @options.accessToken
       
     @headerView.update(@options.discoveryUrl, @options.apiKey)

@@ -49,6 +49,7 @@
 
     <script type="text/javascript">
         $(function () {
+        	jQuery.ajaxSettings.traditional = true;
             window.swaggerUi = new SwaggerUi({
                 discoveryUrl:"/api/api-docs",
                 apiKey:"special-key",
