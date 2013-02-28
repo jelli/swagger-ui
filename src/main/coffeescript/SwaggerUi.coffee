@@ -24,6 +24,7 @@ class SwaggerUi extends Backbone.Router
     # Set the callbacks
     @options.success = => @render()
     @options.progress = (d) => @showMessage(d)
+    @options.status = (d) => @showStatus(d)
     @options.failure = (d) => @onLoadFailure(d)
 
     # Create view to handle the header inputs
@@ -36,12 +37,37 @@ class SwaggerUi extends Backbone.Router
   updateSwaggerUi: (data) ->
     @options.discoveryUrl = data.discoveryUrl
     @options.apiKey = data.apiKey
-    @load()
-
+    @options.apiLogin = data.apiLogin
+    @options.apiPassword = data.apiPassword
+    
+    self = @
+    
+    if data.apiLogin
+      @options.progress("authenticating "+data.apiLogin+" ...")
+      $.ajax self.api.basePath+"/authentications", 
+        type: "POST"
+        contentType: "application/json"
+        dataType: "json"
+        data: JSON.stringify({email:data.apiLogin, password:data.apiPassword})
+        success : (data) ->
+          self.options.status("authenticated "+self.options.apiLogin+" ("+data.accessToken+")")
+          self.options.accessToken = data.accessToken
+          self.load() 
+        error : (jqXHR, textStatus, errorThrown) ->
+          self.options.progress("error: "+errorThrown)        
+    else 
+      self.options.phoenixAuth = null
+      @load()
+      
   # Create an api and render
   load: ->
     # Initialize the API object
     @mainView?.clear()
+    @options.headers = {}
+    @options.supportHeaderParams = true
+    if @options.accessToken
+      @options.headers['X-Jelli-Authentication'] = 'accessToken='+ @options.accessToken
+      
     @headerView.update(@options.discoveryUrl, @options.apiKey)
     @api = new SwaggerApi(@options)
 
@@ -66,6 +92,11 @@ class SwaggerUi extends Backbone.Router
     $('#message-bar').removeClass 'message-fail'
     $('#message-bar').addClass 'message-success'
     $('#message-bar').html data
+
+  showStatus: (data = '') ->
+    $('#status-bar').removeClass 'message-fail'
+    $('#status-bar').addClass 'message-success'
+    $('#status-bar').html data
 
   # shows message in red
   onLoadFailure: (data = '') ->

@@ -1,7 +1,5 @@
 class HeaderView extends Backbone.View
   events: {
-    'click #show-pet-store-icon'    : 'showPetStore'
-    'click #show-wordnik-dev-icon'  : 'showWordnikDev'
     'click #explore'                : 'showCustom'
     'keyup #input_baseUrl'          : 'showCustomOnKeyup'
     'keyup #input_apiKey'           : 'showCustomOnKeyup'
@@ -10,18 +8,6 @@ class HeaderView extends Backbone.View
   initialize: ->
 
 
-  showPetStore: (e) ->
-    @trigger(
-      'update-swagger-ui'
-      {discoveryUrl:"http://petstore.swagger.wordnik.com/api/api-docs.json", apiKey:"special-key"}
-    )
-
-  showWordnikDev: (e) ->
-    @trigger(
-      'update-swagger-ui'
-      {discoveryUrl:"http://api.wordnik.com/v4/resources.json", apiKey:""}
-    )
-
   showCustomOnKeyup: (e) ->
     @showCustom() if e.keyCode is 13
 
@@ -29,7 +15,7 @@ class HeaderView extends Backbone.View
     e?.preventDefault()
     @trigger(
       'update-swagger-ui'
-      {discoveryUrl: $('#input_baseUrl').val(), apiKey: $('#input_apiKey').val()}
+      {discoveryUrl: $('#input_baseUrl').val(), apiKey: $('#input_apiKey').val(), apiLogin: $('#input_apiLogin').val(), apiPassword: $('#input_apiPassword').val(),}
     )
 
   update: (url, apiKey, trigger = false) ->

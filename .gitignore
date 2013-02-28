@@ -19,5 +19,6 @@ reports/*
 swagger-ui.sublime-workspace
 .idea
 .project
+.settings
 node_modules
-.dist
+dist
